@@ -7,7 +7,7 @@ public class VintageVibrationsCommands : ModSystem
 {
     private ICoreClientAPI capi;
 
-    private VintageVibrationsModSystem bpClient;
+    private VintageVibrationsModSystem vibrationSystem;
 
     public override bool ShouldLoad(EnumAppSide side) => side == EnumAppSide.Client;
     
@@ -16,7 +16,7 @@ public class VintageVibrationsCommands : ModSystem
     {
         capi = api;
         
-        bpClient = api.ModLoader.GetModSystem<VintageVibrationsModSystem>();
+        vibrationSystem = api.ModLoader.GetModSystem<VintageVibrationsModSystem>();
 
         capi.ChatCommands
             .Create("vintagevibrations")
@@ -35,31 +35,42 @@ public class VintageVibrationsCommands : ModSystem
             .BeginSubCommand("vibrate")
             .WithDescription("send a simple one shot vibration signal")
             .HandleWith(OnVibrate)
+            .EndSubCommand()
+        
+            .BeginSubCommand("status")
+            .WithDescription("intiface status")
+            .HandleWith(OnStatus)
             .EndSubCommand();
     }
     
     private TextCommandResult OnConnectVibratables(TextCommandCallingArgs args)
     {
-        if (bpClient.IsConnected()) return TextCommandResult.Error("intiface server already connected.");
+        if (vibrationSystem.IsConnected()) return TextCommandResult.Error("intiface server already connected.");
         
-        bpClient.ConnectDevices();
-        return TextCommandResult.Success("intiface server sucessfully connected.");
+        vibrationSystem.ConnectDevices();
+        return TextCommandResult.Success("trying to connect to intiface server...");
     }
     
     private TextCommandResult OnDisconnectVibratables(TextCommandCallingArgs args)
     {
-        if (!bpClient.IsConnected()) return TextCommandResult.Error("no connection available.");
+        if (!vibrationSystem.IsConnected()) return TextCommandResult.Error("no connection available.");
         
-        bpClient.Shutdown();
+        vibrationSystem.Shutdown();
         return TextCommandResult.Success("intiface server was shutdown.");
 
     }
     
     private TextCommandResult OnVibrate(TextCommandCallingArgs args)
     {
-        if (!bpClient.IsConnected()) return TextCommandResult.Error("no connection available.");
+        if (!vibrationSystem.IsConnected()) return TextCommandResult.Error("no connection available.");
 
-        bpClient.VibrateWithDuration(0.5f, 1f);
+        vibrationSystem.VibrateWithDuration(0.5f, 1f);
         return TextCommandResult.Success("send vibration signal.");
+    }
+    
+    private TextCommandResult OnStatus(TextCommandCallingArgs args)
+    {
+        if (!vibrationSystem.IsConnected()) return TextCommandResult.Error("no connection available.");
+        return TextCommandResult.Success("intiface sever connected.");
     }
 }

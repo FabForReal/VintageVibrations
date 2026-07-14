@@ -3,6 +3,7 @@ unfinished buttplug.io integration for vintage story.
 
 client side only.
 
+
 ## Commands
 
 `.vintagevibrations up` - connect to the intiface client
@@ -11,6 +12,10 @@ client side only.
 
 `.vintagevibrations vibrate` - send a vibration signal
 
+`.vintagevibrations status` - check intiface status
+
+
 ## Trigger
 
 - player receiving damage
+- player successfully knapping an item

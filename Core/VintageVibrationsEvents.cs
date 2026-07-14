@@ -6,8 +6,8 @@ namespace VintageVibrations.Core;
 public class VintageVibrationsEvents : ModSystem
 {
     private ICoreClientAPI capi;
-    
-    private VintageVibrationsModSystem bpClient;
+
+    private VintageVibrationsModSystem? bpClient;
     
     public override bool ShouldLoad(EnumAppSide side) => side == EnumAppSide.Client;
     
